@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createRecord, deleteRecord } from '../controllers/favoriteController';
-import { Authorize } from '../middleware/authMiddleware';
+import { favoriteController } from '../controllers/favoriteController.js';
+import { authController } from '../controllers/authController.js';
 
 const router = Router();
-router.post('/', Authorize, createRecord);
-router.delete('/:productId', Authorize, deleteRecord);
+router.post('/', authController.authorize, favoriteController.createRecord);
+router.delete('/:productId', authController.authorize, favoriteController.deleteRecord);
 
 export const favoriteRoutes = router;

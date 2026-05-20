@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import { Authorize } from '../middleware/authMiddleware.js';
-import { createRecord, deleteRecord, getRecord, getRecords, getRecordsByProductId, updateRecord } from '../controllers/reviewController';
+import { reviewController } from '../controllers/reviewController.js';
+import { authController } from '../controllers/authController.js';
 
 const routes = Router();
-routes.get('/', getRecords);
-routes.get('/byId/:id', getRecord);
-routes.get('/byProduct/:productId', getRecordsByProductId);
-routes.post('/', Authorize, createRecord);
-routes.put('/:id', Authorize, updateRecord);
-routes.delete('/:id', Authorize, deleteRecord);
+routes.get('/', reviewController.getRecords);
+routes.get('/byProductId/:id', reviewController.getRecordsByProductId);
+routes.get('/byreview/:reviewId', reviewController.getRecord);
+routes.post('/', authController.authorize, reviewController.createRecord);
+routes.put('/:id', authController.authorize, reviewController.updateRecord);
+routes.delete('/:id', authController.authorize, reviewController.deleteRecord);
 
 export const reviewRoutes = routes;

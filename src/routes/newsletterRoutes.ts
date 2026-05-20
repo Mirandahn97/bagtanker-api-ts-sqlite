@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import { createRecord, deleteRecord } from '../controllers/newsletterController.js';
-import { Authorize } from '../middleware/authMiddleware.js';
+import { newsletterSubscriberController } from '../controllers/newsletterController.js';
+import { authController } from '../controllers/authController.js';
 
 const router = Router();
-router.post('/', createRecord);
-router.delete('/:id', Authorize, deleteRecord);
+router.post('/', newsletterSubscriberController.createRecord);
+router.delete('/:id', authController.authorize, newsletterSubscriberController.deleteRecord);
 
 export const newsletterRoutes = router;

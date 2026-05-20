@@ -14,7 +14,7 @@ import { newsletterRoutes } from './routes/newsletterRoutes.js';
 import { slideRoutes } from './routes/slideRoutes.js';
 
 dotenv.config();
-const port = process.env.SERVERPORT || 3000
+const port = process.env.PORT || 3000
 
 const app = express();
 const IMAGES_DIR = path.resolve(process.cwd(), "assets", "images");

@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getRecord, getRecords } from '../controllers/newsController.js';
+import { newsController } from '../controllers/newsController.js';
 
 const routes = Router();
-routes.get('/', getRecords);
-routes.get('/:slug', getRecord);
+routes.get('/', newsController.getRecords);
+routes.get('/:slug', newsController.getRecord);
 
 export const newsRoutes = routes;

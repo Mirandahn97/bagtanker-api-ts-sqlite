@@ -14,7 +14,8 @@ datasource db {
 
 model User {
   id           Int     @id @default(autoincrement()) // -> Primary Key med auto optælling
-  name         String  @default("Ikke navngivet")
+  firstname    String  @default("")
+  lastname     String  @default("")
   email        String  @unique // -> Unik værdi
   password     String
   description  String? // -> Lang tekst

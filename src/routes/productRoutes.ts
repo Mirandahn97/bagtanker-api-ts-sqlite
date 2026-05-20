@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { getRecord, getRecords } from '../controllers/productController.js';
+import { productController } from '../controllers/productController.js';
 
 const routes = Router();
-routes.get('/', getRecords);
-routes.get('/:id', getRecord);
+routes.get('/', productController.getRecords);
+routes.get('/:id', productController.getRecord);
 
 export const productRoutes = routes;

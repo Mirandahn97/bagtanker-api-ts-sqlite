@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { getRecords } from '../controllers/slideController.js';
+import { slideController } from '../controllers/slideController.js';
 
 const router = Router();
-router.get('/', getRecords);
+router.get('/', slideController.getRecords);
 
 export const slideRoutes = router;
