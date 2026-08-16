@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
-import { prisma } from '../prisma.js';
-import { toBoolean } from '../utils/formatter.js';
+import { Request, Response } from "express";
+import { prisma } from "../prisma.js";
+import { toBoolean } from "../utils/formatter.js";
 
 class ReviewController {
   getRecords = async (req: Request, res: Response) => {
@@ -9,33 +9,40 @@ class ReviewController {
       res.json(data);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Failed to fetch reviews' });
+      res.status(500).json({ error: "Failed to fetch reviews" });
     }
   };
 
   getRecord = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { reviewId } = req.params;
+    const parsedId = Number(reviewId);
+
+    if (!Number.isInteger(parsedId) || parsedId <= 0) {
+      return res.status(400).json({ error: "Invalid review id" });
+    }
+
     try {
       const data = await prisma.review.findUnique({
         where: {
-          id: Number(id)
+          id: parsedId,
         },
         include: {
           user: {
             select: {
-              name: true,
-              email: true
-            }
-          }
-        }
+              firstname: true,
+              lastname: true,
+              email: true,
+            },
+          },
+        },
       });
       if (!data) {
-        return res.status(404).json({ error: 'Review not found' });
+        return res.status(404).json({ error: "Review not found" });
       }
       res.json(data);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Failed to fetch review' });
+      res.status(500).json({ error: "Failed to fetch review" });
     }
   };
 
@@ -44,7 +51,7 @@ class ReviewController {
     try {
       const data = await prisma.review.findMany({
         where: {
-          productId: Number(id)
+          productId: Number(id),
         },
         select: {
           title: true,
@@ -52,16 +59,17 @@ class ReviewController {
           numStars: true,
           user: {
             select: {
-              name: true,
-              email: true
-            }
-          }
-        }
+              firstname: true,
+              lastname: true,
+              email: true,
+            },
+          },
+        },
       });
       res.json(data);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Failed to fetch reviews' });
+      res.status(500).json({ error: "Failed to fetch reviews" });
     }
   };
 
@@ -69,7 +77,7 @@ class ReviewController {
     const userId = req.user?.id;
     const { title, comment, numStars, productId, isActive } = req.body;
     if (!userId || !title || !comment || !numStars || !productId) {
-      return res.status(400).json({ error: 'All fields are required' });
+      return res.status(400).json({ error: "All fields are required" });
     }
     try {
       const data = await prisma.review.create({
@@ -79,13 +87,13 @@ class ReviewController {
           numStars: Number(numStars),
           userId: Number(userId),
           productId: Number(productId),
-          isActive: toBoolean(isActive)
-        }
+          isActive: toBoolean(isActive),
+        },
       });
       res.status(201).json(data);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Failed to create review' });
+      res.status(500).json({ error: "Failed to create review" });
     }
   };
 
@@ -95,18 +103,18 @@ class ReviewController {
     try {
       const data = await prisma.review.update({
         where: {
-          id: Number(id)
+          id: Number(id),
         },
         data: {
           title,
           comment,
-          numStars: Number(numStars)
-        }
+          numStars: Number(numStars),
+        },
       });
       res.status(200).json(data);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Failed to update review' });
+      res.status(500).json({ error: "Failed to update review" });
     }
   };
 
@@ -115,13 +123,13 @@ class ReviewController {
     try {
       await prisma.review.delete({
         where: {
-          id: Number(id)
-        }
+          id: Number(id),
+        },
       });
-      res.status(200).json({ message: 'Review deleted' });
+      res.status(200).json({ message: "Review deleted" });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Failed to delete review' });
+      res.status(500).json({ error: "Failed to delete review" });
     }
   };
 }
